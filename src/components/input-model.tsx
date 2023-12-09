@@ -6,36 +6,56 @@ import {
   DropdownMenuContent,
   DropdownMenuGroup,
   DropdownMenuItem,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { ReactNode, useState } from "react";
+import { ReactNode, useEffect, useRef, useState } from "react";
 import _ from "lodash";
+import { Input } from "@/components/ui/input";
+import { useUncontrolled } from "@mantine/hooks";
 
 export const models = ["agent-assistant", "gpt-3.5-turbo", "gpt-4"] as const;
 export type Model = (typeof models)[number];
 
 export default function InputModel() {
   const [model, setModel] = useState<Model>(models[0]);
+  const [modelSearch, setModelSearch] = useState("");
+  console.log("-- InputModel: ", { model, modelSearch });
 
   return (
     <DropdownMenu>
       <DropdownMenuTrigger className={"outline-none "}>
-        <Badge variant={"secondary"}>{getModelTitle(model)}</Badge>
+        <Badge variant={"default"}>{getModelTitle(model)}</Badge>
       </DropdownMenuTrigger>
 
-      <DropdownMenuContent>
+      <DropdownMenuContent className={"p-2"}>
+        {/* todo: fix: 输入的时候，如果匹配，则focus被item吸走 */}
+        {/*<DropdownMenuGroup>*/}
+        {/*  <Input*/}
+        {/*    className={"focus-visible:ring-0"}*/}
+        {/*    value={modelSearch}*/}
+        {/*    onChange={(event) => {*/}
+        {/*      setModelSearch(event.currentTarget.value);*/}
+        {/*    }}*/}
+        {/*  />*/}
+        {/*</DropdownMenuGroup>*/}
+
+        {/*<DropdownMenuSeparator />*/}
+
         <DropdownMenuGroup>
-          {models.map((model) => (
-            <DropdownMenuItem
-              key={model}
-              onClick={() => {
-                setModel(model);
-              }}
-            >
-              {/*{`${getModelTitle(model)} (${model})`}*/}
-              {getModelTitle(model)}
-            </DropdownMenuItem>
-          ))}
+          {models
+            .filter((model) => model.includes(modelSearch))
+            .map((model) => (
+              <DropdownMenuItem
+                key={model}
+                onClick={() => {
+                  setModel(model);
+                }}
+              >
+                {/*{`${getModelTitle(model)} (${model})`}*/}
+                {getModelTitle(model)}
+              </DropdownMenuItem>
+            ))}
         </DropdownMenuGroup>
       </DropdownMenuContent>
     </DropdownMenu>

@@ -10,16 +10,23 @@ import { Button } from "@/components/ui/button";
 import React, { useRef, useState } from "react";
 import { getHotkeyHandler, useHotkeys } from "@mantine/hooks";
 import { toast } from "sonner";
+import { useRouter } from "next/navigation";
+import { nanoid } from "nanoid";
 
 export default function MainInput() {
   const refInput = useRef<HTMLTextAreaElement>(null);
   const [input, setInput] = useState("");
+
+  const router = useRouter();
 
   const submit = (event: KeyboardEvent | React.KeyboardEvent) => {
     if (!input.length) return toast.warning("input can't empty");
     if ((event as KeyboardEvent).isComposing) return;
     console.log("-- sending: ", input);
     setInput("");
+
+    console.log("pusing ");
+    router.push(`c/${nanoid()}`);
   };
 
   const focus = () => {

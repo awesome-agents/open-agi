@@ -7,14 +7,12 @@ export default async function Home() {
   const session = await getServerAuthSession();
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-[#2e026d] to-[#15162c] text-white">
-      <div className={"flex w-full flex-col gap-2 sm:w-[480px]"}>
-        <div className={"my-4 text-center text-2xl font-normal"}>
-          Open AGI To The World
-        </div>
-
-        <MainInput />
+    <div className={"flex w-full flex-col gap-2 px-4 sm:w-[480px]"}>
+      <div className={"my-4 text-center text-2xl font-normal"}>
+        Open AGI To The World
       </div>
-    </main>
+
+      <MainInput />
+    </div>
   );
 }
