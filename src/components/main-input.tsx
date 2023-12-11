@@ -5,7 +5,7 @@ import { INPUT_CLASSNAMES } from "@/components/ui/input";
 import InputModel from "@/components/input-model";
 import { Separator } from "@/components/ui/separator";
 import { Textarea } from "@/components/ui/textarea";
-import { CiFileOn, CiImageOn } from "react-icons/ci";
+import { CiFileOn } from "react-icons/ci";
 import { Button } from "@/components/ui/button";
 import React, { useRef, useState } from "react";
 import { getHotkeyHandler, useHotkeys } from "@mantine/hooks";
@@ -19,13 +19,12 @@ export default function MainInput() {
 
   const router = useRouter();
 
-  const submit = (event: KeyboardEvent | React.KeyboardEvent) => {
+  const submit = () => {
     if (!input.length) return toast.warning("input can't empty");
-    if ((event as KeyboardEvent).isComposing) return;
+
     console.log("-- sending: ", input);
     setInput("");
 
-    console.log("pusing ");
     router.push(`c/${nanoid()}`);
   };
 
@@ -52,7 +51,15 @@ export default function MainInput() {
         onChange={(event) => {
           setInput(event.currentTarget.value);
         }}
-        onKeyDown={getHotkeyHandler([["enter", submit]])}
+        onKeyDown={getHotkeyHandler([
+          [
+            "enter",
+            (event) => {
+              if ((event as KeyboardEvent).isComposing) return;
+              submit();
+            },
+          ],
+        ])}
       />
       <div className={"text-muted-foreground"}>
         Space to focus, Enter to send
@@ -67,7 +74,7 @@ export default function MainInput() {
 
         <CiFileOn className={"h-6 w-6"} />
 
-        <Button className={"ml-auto "} size={"sm"}>
+        <Button className={"ml-auto "} size={"sm"} onClick={submit}>
           Query
         </Button>
       </div>
